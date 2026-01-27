@@ -535,6 +535,47 @@ section {
     display: block;
 }
 
+/* Importação de Excel no Cadastro em Lote */
+.excel-import-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.excel-import-container input[type="file"] {
+    padding: 12px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.excel-import-container input[type="file"]:hover {
+    border-color: #1e40af;
+    background: #eff6ff;
+}
+
+.divisor-ou {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 16px 0;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.divisor-ou::before,
+.divisor-ou::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.divisor-ou span {
+    padding: 0 12px;
+}
+
 .spacer {
     flex: 1;
 }
@@ -3145,6 +3186,10 @@ tbody tr:hover td:first-child {
     color: #8b5cf6;
 }
 
+.btn-chip-calendario.gray svg {
+    color: #64748b;
+}
+
 /* Cards de Período - Borda Lateral Colorida */
 .periodo-card-padronizado {
     background: #f8fafc;
@@ -3392,9 +3437,33 @@ tbody tr:hover td:first-child {
 .processo-numero-heatmap {
     font-weight: 700;
     color: #0f172a;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     margin-bottom: 4px;
     font-size: 0.78rem;
+}
+
+.btn-copiar-heatmap {
+    background: transparent;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.btn-copiar-heatmap svg {
+    width: 12px;
+    height: 12px;
+    color: #94a3b8;
+}
+
+.btn-copiar-heatmap:hover svg {
+    color: #1e40af;
 }
 
 .processo-dias-heatmap {
@@ -3789,6 +3858,244 @@ tbody tr:hover td:first-child {
     .nav-button-heatmap {
         padding: 6px 12px;
         font-size: 0.9rem;
+    }
+}
+
+/* ============================================
+   ESTILOS DE IMPRESSÃO - CALENDÁRIO
+   ============================================ */
+@media print {
+    /* Configuração da página */
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
+
+    /* Reset para impressão */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Esconder tudo da página */
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body > *:not(#modal-heatmap) {
+        display: none !important;
+    }
+
+    /* Esconder sidebar, container principal, etc */
+    .sidebar,
+    .container,
+    .modal:not(#modal-heatmap) {
+        display: none !important;
+    }
+
+    /* Container do modal */
+    #modal-heatmap {
+        display: block !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: white !important;
+        z-index: 999999 !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    #modal-heatmap .modal-content {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+        background: white !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Esconder cabeçalho do modal e botões/controles */
+    #modal-heatmap .modal-header {
+        display: none !important;
+    }
+
+    /* Esconder botões e controles */
+    #modal-heatmap .close-modal-heatmap,
+    #modal-heatmap .close-btn-padronizado,
+    #modal-heatmap .calendar-config-buttons-padronizado,
+    #modal-heatmap .modal-actions,
+    #modal-heatmap .nav-button-heatmap,
+    #modal-heatmap .btn-copiar-heatmap,
+    #modal-heatmap .prioridade-badge {
+        display: none !important;
+    }
+
+    /* Header do calendário (mês/ano) */
+    #modal-heatmap .calendar-header-heatmap {
+        display: flex !important;
+        justify-content: center !important;
+        margin-bottom: 8px !important;
+    }
+
+    #modal-heatmap .month-title-heatmap {
+        font-size: 14pt !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+    }
+
+    /* Modal body */
+    #modal-heatmap .modal-body {
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Grid do calendário */
+    #modal-heatmap .calendar-grid-heatmap {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        gap: 1px !important;
+        background: #cbd5e1 !important;
+        border: 1px solid #cbd5e1 !important;
+        width: 100% !important;
+    }
+
+    /* Cabeçalhos dos dias da semana */
+    #modal-heatmap .calendar-day-header-heatmap {
+        background: #1e40af !important;
+        color: white !important;
+        font-size: 8pt !important;
+        font-weight: 700 !important;
+        padding: 6px 4px !important;
+        text-align: center !important;
+    }
+
+    #modal-heatmap .calendar-day-header-heatmap.weekend-header {
+        background: #64748b !important;
+    }
+
+    /* Células dos dias */
+    #modal-heatmap .calendar-day-heatmap {
+        background: white !important;
+        padding: 3px !important;
+        min-height: 70px !important;
+        height: auto !important;
+        font-size: 7pt !important;
+        vertical-align: top !important;
+        overflow: hidden !important;
+        border: none !important;
+    }
+
+    #modal-heatmap .calendar-day-heatmap.weekend {
+        background: #f1f5f9 !important;
+    }
+
+    #modal-heatmap .calendar-day-heatmap.other-month {
+        background: #f8fafc !important;
+        opacity: 0.5 !important;
+    }
+
+    #modal-heatmap .calendar-day-heatmap.feriado {
+        background: #fef9c3 !important;
+    }
+
+    #modal-heatmap .calendar-day-heatmap.ferias {
+        background: #dbeafe !important;
+    }
+
+    /* Número do dia */
+    #modal-heatmap .day-number-heatmap {
+        font-size: 9pt !important;
+        font-weight: 700 !important;
+        color: #374151 !important;
+        margin-bottom: 2px !important;
+    }
+
+    #modal-heatmap .day-number-heatmap.today {
+        background: #1e40af !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 18px !important;
+        height: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Processos */
+    #modal-heatmap .processo-item-heatmap {
+        background: #f0f9ff !important;
+        border: 1px solid #0ea5e9 !important;
+        border-radius: 2px !important;
+        padding: 2px 3px !important;
+        margin-bottom: 2px !important;
+        font-size: 6pt !important;
+        line-height: 1.2 !important;
+        overflow: hidden !important;
+    }
+
+    #modal-heatmap .processo-item-heatmap.urgente {
+        background: #fef3c7 !important;
+        border-color: #f59e0b !important;
+    }
+
+    #modal-heatmap .processo-item-heatmap.critico {
+        background: #fee2e2 !important;
+        border-color: #ef4444 !important;
+    }
+
+    #modal-heatmap .processo-numero-heatmap {
+        display: block !important;
+        font-size: 6pt !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    #modal-heatmap .processo-dias-heatmap {
+        display: block !important;
+        font-size: 5.5pt !important;
+        color: #64748b !important;
+    }
+
+    /* Legenda */
+    #modal-heatmap .legenda-heatmap {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        margin-top: 8px !important;
+        padding-top: 8px !important;
+        border-top: 1px solid #e2e8f0 !important;
+    }
+
+    #modal-heatmap .legenda-item-heatmap {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        font-size: 7pt !important;
+    }
+
+    #modal-heatmap .legenda-cor-heatmap {
+        width: 12px !important;
+        height: 12px !important;
+        border-radius: 2px !important;
+        flex-shrink: 0 !important;
     }
 }
 
@@ -4384,10 +4691,25 @@ tbody tr:hover td:first-child {
             </div>
             <div class="modal-body">
                 <p class="modal-description">
-                    Cole os números dos processos com suas respectivas datas de conclusão (um por linha):
+                    Importe de uma planilha Excel ou cole os números dos processos manualmente:
                 </p>
 
                 <form id="cadastro-lote-form">
+                    <!-- Importação de Excel -->
+                    <div class="form-group">
+                        <label for="arquivo-excel-lote">📊 Importar do Excel (.xlsx)</label>
+                        <div class="excel-import-container">
+                            <input type="file" id="arquivo-excel-lote" accept=".xlsx,.xls" onchange="manager.processarArquivoExcel(this)">
+                            <small class="help-text">
+                                💡 A planilha deve ter: <strong>Coluna A</strong> = Número do processo, <strong>Coluna B</strong> = Data de conclusão
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="divisor-ou">
+                        <span>ou cole manualmente</span>
+                    </div>
+
                     <div class="form-group">
                         <label for="numeros-lote">Processos e Datas de Conclusão *</label>
                         <textarea id="numeros-lote" rows="8" placeholder="Cole os processos aqui, um por linha no formato:&#10;0871222-20.2024.8.20.5001 09/10/2025&#10;0859333-87.2021.8.20.5001 02/04/2025&#10;0876111-49.2024.8.20.5001 03/05/2025" required></textarea>
@@ -4853,6 +5175,12 @@ tbody tr:hover td:first-child {
                         </svg>
                         Resetar Posições
                     </button>
+                    <button class="btn-chip-calendario gray" onclick="manager.imprimirCalendario()" title="Imprimir calendário">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                        </svg>
+                        Imprimir
+                    </button>
                 </div>
                 <div id="heatmap-container" class="calendar-grid-heatmap">
                     <!-- Gerado dinamicamente pelo JS -->
@@ -5152,6 +5480,8 @@ tbody tr:hover td:first-child {
     <!-- Biblioteca jsPDF para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- SheetJS para leitura de arquivos Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
 // Sistema de Controle de Processos - Gabinete Judicial
@@ -6113,6 +6443,14 @@ class ProcessoManager {
         // Limpar tooltips órfãos antes de re-renderizar
         this.limparTooltipsOrfaos();
 
+        // Verificar se há filtro de busca ativo
+        const busca = document.getElementById('busca').value.trim();
+        if (busca) {
+            // Se houver filtro, usar filtrarProcessos para manter o filtro ativo
+            this.filtrarProcessos();
+            return;
+        }
+
         // Separar processos por status
         const processosAndamento = this.processos.filter(p =>
             p.status === 'aguardando-despacho' || p.status === 'concluso'
@@ -6807,9 +7145,10 @@ class ProcessoManager {
     abrirModalCadastroLote() {
         const modal = document.getElementById('modal-cadastro-lote');
 
-        // Limpar textarea
+        // Limpar textarea e input de arquivo
         document.getElementById('numeros-lote').value = '';
         document.getElementById('preview-count-lote').textContent = '';
+        document.getElementById('arquivo-excel-lote').value = '';
 
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
@@ -6821,6 +7160,94 @@ class ProcessoManager {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+    }
+
+    processarArquivoExcel(input) {
+        const arquivo = input.files[0];
+        if (!arquivo) return;
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            try {
+                const dados = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(dados, { type: 'array' });
+
+                // Pegar a primeira planilha
+                const primeiraPlanilha = workbook.Sheets[workbook.SheetNames[0]];
+
+                // Converter para JSON
+                const linhas = XLSX.utils.sheet_to_json(primeiraPlanilha, { header: 1 });
+
+                // Processar linhas (ignorar cabeçalho se existir)
+                const processosTexto = [];
+
+                for (let i = 0; i < linhas.length; i++) {
+                    const linha = linhas[i];
+                    if (!linha || linha.length < 2) continue;
+
+                    let numeroProcesso = linha[0];
+                    let dataConclusao = linha[1];
+
+                    // Pular se parecer ser cabeçalho
+                    if (typeof numeroProcesso === 'string' &&
+                        (numeroProcesso.toLowerCase().includes('processo') ||
+                         numeroProcesso.toLowerCase().includes('número') ||
+                         numeroProcesso.toLowerCase().includes('numero'))) {
+                        continue;
+                    }
+
+                    // Converter número do processo para string
+                    numeroProcesso = String(numeroProcesso).trim();
+
+                    // Tratar a data
+                    let dataFormatada = '';
+                    if (dataConclusao instanceof Date) {
+                        // Se for objeto Date
+                        const dia = String(dataConclusao.getDate()).padStart(2, '0');
+                        const mes = String(dataConclusao.getMonth() + 1).padStart(2, '0');
+                        const ano = dataConclusao.getFullYear();
+                        dataFormatada = `${dia}/${mes}/${ano}`;
+                    } else if (typeof dataConclusao === 'number') {
+                        // Se for número serial do Excel
+                        const dataConvertida = XLSX.SSF.parse_date_code(dataConclusao);
+                        if (dataConvertida) {
+                            const dia = String(dataConvertida.d).padStart(2, '0');
+                            const mes = String(dataConvertida.m).padStart(2, '0');
+                            const ano = dataConvertida.y;
+                            dataFormatada = `${dia}/${mes}/${ano}`;
+                        }
+                    } else if (typeof dataConclusao === 'string') {
+                        // Se já for string, tentar usar diretamente
+                        dataFormatada = dataConclusao.trim();
+                    }
+
+                    if (numeroProcesso && dataFormatada) {
+                        processosTexto.push(`${numeroProcesso} ${dataFormatada}`);
+                    }
+                }
+
+                if (processosTexto.length > 0) {
+                    // Preencher o textarea com os dados
+                    document.getElementById('numeros-lote').value = processosTexto.join('\n');
+                    // Atualizar contagem
+                    this.atualizarContagemLote();
+                    this.mostrarNotificacao(`${processosTexto.length} processos importados do Excel!`, 'success');
+                } else {
+                    this.mostrarNotificacao('Nenhum processo válido encontrado na planilha.', 'warning');
+                }
+
+            } catch (erro) {
+                console.error('Erro ao processar Excel:', erro);
+                this.mostrarNotificacao('Erro ao processar arquivo Excel. Verifique o formato.', 'error');
+            }
+        };
+
+        reader.onerror = () => {
+            this.mostrarNotificacao('Erro ao ler o arquivo.', 'error');
+        };
+
+        reader.readAsArrayBuffer(arquivo);
     }
 
     abrirModalAlertas(tipo) {
@@ -7985,18 +8412,6 @@ class ProcessoManager {
 
         // Copiar para área de transferência
         navigator.clipboard.writeText(numeroProcesso).then(() => {
-            // Feedback visual
-            const button = event.target;
-            const textoOriginal = button.textContent;
-
-            button.textContent = '✓';
-            button.style.backgroundColor = '#16a34a';
-
-            setTimeout(() => {
-                button.textContent = textoOriginal;
-                button.style.backgroundColor = '';
-            }, 1500);
-
             this.mostrarNotificacao('Número do processo copiado!', 'success');
         }).catch(err => {
             console.error('Erro ao copiar:', err);
@@ -9419,23 +9834,8 @@ class ProcessoManager {
     }
 
     gerarCalendarioMensal() {
-        // 1. Aplicar MESMO filtro de busca que a tabela usa
-        const buscaOriginal = document.getElementById('busca').value;
-        const busca = this.normalizarTexto(buscaOriginal);
-
-        let processosFiltrados = this.processos;
-
-        // Se houver busca ativa, filtrar
-        if (busca) {
-            processosFiltrados = this.processos.filter(processo => {
-                const numeroNormalizado = this.normalizarTexto(processo.numeroProcesso);
-                const assuntoNormalizado = this.normalizarTexto(this.getAssuntoLabel(processo.assunto));
-                return numeroNormalizado.includes(busca) || assuntoNormalizado.includes(busca);
-            });
-        }
-
-        // 2. Filtrar processos em andamento (mesmo critério da tabela)
-        const processosEmAndamento = processosFiltrados.filter(p =>
+        // Filtrar processos em andamento (ignora filtro de busca - mostra todos)
+        const processosEmAndamento = this.processos.filter(p =>
             (p.status === 'aguardando-despacho' || p.status === 'concluso') &&
             p.dataConclusao
         );
@@ -9672,14 +10072,21 @@ class ProcessoManager {
             if (tipoDiaNaoUtil === 'feriado') classes.push('feriado');
             if (tipoDiaNaoUtil === 'ferias') classes.push('ferias');
 
+            // Calcular dias entre hoje e a data do calendário (para previsão)
+            const diasAteData = Math.floor((diaObj.data - hoje) / (1000 * 60 * 60 * 24));
+            const diasAdicionais = diasAteData > 0 ? diasAteData : 0;
+
             // Renderizar processos do dia
             const processosHtml = processos.map(p => {
-                const diasConclusos = this.calcularDiasNumerico(p.dataConclusao);
+                const diasConclusosHoje = this.calcularDiasNumerico(p.dataConclusao);
+                // Previsão: dias atuais + dias até a data do calendário
+                const diasPrevisao = diasConclusosHoje + diasAdicionais;
                 let classeUrgencia = 'processo-item-heatmap';
 
-                if (diasConclusos >= ProcessoManager.DIAS_CRITICO) {
+                // Usar a previsão para determinar urgência
+                if (diasPrevisao >= ProcessoManager.DIAS_CRITICO) {
                     classeUrgencia += ' critico';
-                } else if (diasConclusos >= ProcessoManager.DIAS_ATENCAO) {
+                } else if (diasPrevisao >= ProcessoManager.DIAS_ATENCAO) {
                     classeUrgencia += ' urgente';
                 }
 
@@ -9696,8 +10103,16 @@ class ProcessoManager {
                          data-data-origem="${chave}"
                          ondragstart="manager.handleDragStart(event)"
                          ondragend="manager.handleDragEnd(event)">
-                        <span class="processo-numero-heatmap">${p.numeroProcesso}</span>
-                        <span class="processo-dias-heatmap">${this.calcularDiasConclusos(p.dataConclusao)}</span>
+                        <span class="processo-numero-heatmap">
+                            ${p.numeroProcesso}
+                            <button class="btn-copiar-heatmap" onclick="manager.copiarNumeroProcesso('${p.numeroProcesso}', event)" title="Copiar número">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </span>
+                        <span class="processo-dias-heatmap">${diasPrevisao} dias</span>
                         ${this.renderizarPrioridadeBadge(p.prioridade)}
                     </div>
                 `;
@@ -9925,6 +10340,24 @@ class ProcessoManager {
         this.salvarPosicoesCustomizadas();
         this.gerarCalendarioMensal();
         this.mostrarNotificacao('Posições resetadas para o padrão', 'sucesso');
+    }
+
+    imprimirCalendario() {
+        // Obter o título do mês atual para exibir na impressão
+        const tituloMes = document.getElementById('month-title-heatmap').textContent;
+
+        // Adicionar título temporário para impressão
+        const modalHeader = document.querySelector('#modal-heatmap .modal-header h2');
+        const tituloOriginal = modalHeader.textContent;
+        modalHeader.textContent = `Planejamento de Prazos - ${tituloMes}`;
+
+        // Imprimir
+        window.print();
+
+        // Restaurar título original após impressão
+        setTimeout(() => {
+            modalHeader.textContent = tituloOriginal;
+        }, 500);
     }
 
     // ============================================
