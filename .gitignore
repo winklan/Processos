@@ -1,0 +1,8 @@
+# Backups de dados (contém dados sensíveis)
+processos-backup-*.json
+
+# Screenshots
+*.png
+
+# Arquivos temporários
+frontend.txt
