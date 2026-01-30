@@ -1781,6 +1781,188 @@ textarea {
     margin-top: 25px;
 }
 
+/* Seção do Gráfico de Evolução */
+.chart-section {
+    background: var(--white);
+    border: none;
+    animation: fadeIn 0.5s ease;
+    padding: 24px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.chart-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444 0%, #f97316 50%, #ef4444 100%);
+}
+
+.chart-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    margin-top: 16px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.chart-legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.chart-legend-color.criticos {
+    background: #ef4444;
+}
+
+.chart-legend-color.atencao {
+    background: #f59e0b;
+}
+
+.chart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: var(--text-muted);
+}
+
+.chart-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.chart-tooltip {
+    position: fixed;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-lg);
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    min-width: 180px;
+}
+
+.chart-tooltip.visible {
+    opacity: 1;
+}
+
+.chart-tooltip-date {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 6px;
+}
+
+.chart-tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 0.8125rem;
+}
+
+.chart-tooltip-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+}
+
+.chart-tooltip-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.chart-tooltip-dot.criticos {
+    background: #ef4444;
+}
+
+.chart-tooltip-dot.atencao {
+    background: #f59e0b;
+}
+
+.chart-tooltip-value {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.chart-tooltip-variacao {
+    font-size: 0.75rem;
+    margin-left: 6px;
+    font-weight: 500;
+}
+
+.chart-tooltip-variacao.positivo {
+    color: #ef4444;
+}
+
+.chart-tooltip-variacao.negativo {
+    color: #22c55e;
+}
+
+.chart-tooltip-variacao.neutro {
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        height: 220px;
+    }
+
+    .chart-section {
+        padding: 16px;
+    }
+}
 
 /* Lista de Processos */
 .list-header {
@@ -4980,6 +5162,49 @@ tbody tr:hover td:first-child {
                 </div>
             </section>
 
+            <!-- Gráfico de Evolução dos Processos Críticos -->
+            <section class="chart-section" id="chart-section">
+                <h2>Evolução dos Processos Críticos</h2>
+                <div class="chart-container" id="chart-container">
+                    <canvas id="chart-evolucao"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="chart-legend-item">
+                        <span class="chart-legend-color criticos"></span>
+                        <span>Processos Críticos</span>
+                    </div>
+                    <div class="chart-legend-item">
+                        <span class="chart-legend-color atencao"></span>
+                        <span>Processos em Atenção</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tooltip do Gráfico -->
+            <div class="chart-tooltip" id="chart-tooltip">
+                <div class="chart-tooltip-date" id="chart-tooltip-date"></div>
+                <div class="chart-tooltip-row">
+                    <span class="chart-tooltip-label">
+                        <span class="chart-tooltip-dot criticos"></span>
+                        Críticos
+                    </span>
+                    <span>
+                        <span class="chart-tooltip-value" id="chart-tooltip-criticos">0</span>
+                        <span class="chart-tooltip-variacao" id="chart-tooltip-criticos-var"></span>
+                    </span>
+                </div>
+                <div class="chart-tooltip-row">
+                    <span class="chart-tooltip-label">
+                        <span class="chart-tooltip-dot atencao"></span>
+                        Atenção
+                    </span>
+                    <span>
+                        <span class="chart-tooltip-value" id="chart-tooltip-atencao">0</span>
+                        <span class="chart-tooltip-variacao" id="chart-tooltip-atencao-var"></span>
+                    </span>
+                </div>
+            </div>
+
             <!-- Lista de Processos -->
             <section class="list-section" aria-labelledby="list-title">
                 <div class="list-header">
@@ -7106,6 +7331,9 @@ class ProcessoManager {
         // Atualizar alertas visuais
         this.atualizarAlertas(processosAndamento);
 
+        // Renderizar gráfico de evolução
+        this.renderizarGraficoEvolucao(processosAndamento);
+
         // Renderizar tabelas
         this.renderizarTabelaAndamento(processosAndamento);
         this.renderizarTabelaDespachados(processosDespachados);
@@ -7675,6 +7903,7 @@ class ProcessoManager {
             p.status === 'aguardando-despacho' || p.status === 'concluso'
         );
         this.atualizarAlertas(todosProcessosAndamento);
+        this.renderizarGraficoEvolucao(todosProcessosAndamento);
 
         this.renderizarTabelaAndamento(processosAndamento);
         this.renderizarTabelaDespachados(processosDespachados);
@@ -9906,6 +10135,303 @@ class ProcessoManager {
         this.atualizarBadgesSidebar();
     }
 
+    renderizarGraficoEvolucao(processosAndamento) {
+        const canvas = document.getElementById('chart-evolucao');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const container = canvas.parentElement;
+
+        // Configurar tamanho do canvas para alta resolução
+        const dpr = window.devicePixelRatio || 1;
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+
+        // Limpar canvas
+        ctx.clearRect(0, 0, rect.width, rect.height);
+
+        // Calcular dados dos últimos 30 dias
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const diasParaMostrar = 30;
+        const dadosCriticos = [];
+        const dadosAtencao = [];
+        const datasCompletas = [];
+        const labels = [];
+
+        // Filtrar apenas processos em andamento com data de conclusão
+        const processosComData = processosAndamento.filter(p => p.dataConclusao);
+
+        for (let i = diasParaMostrar - 1; i >= 0; i--) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() - i);
+
+            // Contar processos que eram críticos nesse dia
+            let criticos = 0;
+            let atencao = 0;
+
+            processosComData.forEach(p => {
+                const dataConc = new Date(p.dataConclusao + 'T00:00:00');
+                const diffDias = Math.floor((dia - dataConc) / (1000 * 60 * 60 * 24));
+
+                if (diffDias >= ProcessoManager.DIAS_CRITICO) {
+                    criticos++;
+                } else if (diffDias >= ProcessoManager.DIAS_ATENCAO) {
+                    atencao++;
+                }
+            });
+
+            dadosCriticos.push(criticos);
+            dadosAtencao.push(atencao);
+            datasCompletas.push(new Date(dia));
+
+            // Label: mostrar dia/mês a cada 5 dias ou no primeiro/último
+            if (i % 5 === 0 || i === 0 || i === diasParaMostrar - 1) {
+                labels.push(dia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+            } else {
+                labels.push('');
+            }
+        }
+
+        // Configurações do gráfico
+        const padding = { top: 30, right: 20, bottom: 40, left: 50 };
+        const chartWidth = rect.width - padding.left - padding.right;
+        const chartHeight = rect.height - padding.top - padding.bottom;
+
+        // Encontrar valor máximo para escala
+        const maxValue = Math.max(...dadosCriticos, ...dadosAtencao, 1);
+        const yScale = chartHeight / (maxValue * 1.1); // 10% de margem
+
+        // Função para converter dados em coordenadas
+        const getX = (index) => padding.left + (index / (diasParaMostrar - 1)) * chartWidth;
+        const getY = (value) => padding.top + chartHeight - (value * yScale);
+
+        // Desenhar grade de fundo
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 1;
+
+        // Linhas horizontais
+        const numLinhas = 5;
+        for (let i = 0; i <= numLinhas; i++) {
+            const y = padding.top + (i / numLinhas) * chartHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(padding.left + chartWidth, y);
+            ctx.stroke();
+
+            // Labels do eixo Y
+            const valor = Math.round(maxValue * 1.1 * (1 - i / numLinhas));
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '11px Open Sans';
+            ctx.textAlign = 'right';
+            ctx.fillText(valor.toString(), padding.left - 8, y + 4);
+        }
+
+        // Função para desenhar linha com preenchimento
+        const desenharLinha = (dados, cor, corFill) => {
+            if (dados.length === 0) return;
+
+            // Área preenchida
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(0));
+            dados.forEach((valor, index) => {
+                ctx.lineTo(getX(index), getY(valor));
+            });
+            ctx.lineTo(getX(dados.length - 1), getY(0));
+            ctx.closePath();
+            ctx.fillStyle = corFill;
+            ctx.fill();
+
+            // Linha
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(dados[0]));
+            dados.forEach((valor, index) => {
+                if (index > 0) {
+                    ctx.lineTo(getX(index), getY(valor));
+                }
+            });
+            ctx.strokeStyle = cor;
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Pontos
+            dados.forEach((valor, index) => {
+                ctx.beginPath();
+                ctx.arc(getX(index), getY(valor), 3, 0, Math.PI * 2);
+                ctx.fillStyle = cor;
+                ctx.fill();
+            });
+        };
+
+        // Desenhar linhas (atenção primeiro, depois críticos por cima)
+        desenharLinha(dadosAtencao, '#f59e0b', 'rgba(245, 158, 11, 0.1)');
+        desenharLinha(dadosCriticos, '#ef4444', 'rgba(239, 68, 68, 0.15)');
+
+        // Labels do eixo X
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '11px Open Sans';
+        ctx.textAlign = 'center';
+        labels.forEach((label, index) => {
+            if (label) {
+                ctx.fillText(label, getX(index), rect.height - 10);
+            }
+        });
+
+        // Armazenar dados para tooltip
+        this.chartData = {
+            dadosCriticos,
+            dadosAtencao,
+            datasCompletas,
+            padding,
+            chartWidth,
+            chartHeight,
+            diasParaMostrar,
+            getX,
+            getY
+        };
+
+        // Configurar interatividade do tooltip
+        this.configurarTooltipGrafico(canvas, container);
+    }
+
+    configurarTooltipGrafico(canvas, container) {
+        const tooltip = document.getElementById('chart-tooltip');
+        if (!tooltip) return;
+
+        // Remover listeners anteriores
+        if (this._chartMouseMoveHandler) {
+            canvas.removeEventListener('mousemove', this._chartMouseMoveHandler);
+            canvas.removeEventListener('mouseleave', this._chartMouseLeaveHandler);
+        }
+
+        const raioDeteccao = 12; // Raio em pixels para detectar proximidade com a bolinha
+
+        this._chartMouseMoveHandler = (e) => {
+            if (!this.chartData) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const { diasParaMostrar, dadosCriticos, dadosAtencao, datasCompletas, getX, getY } = this.chartData;
+
+            // Verificar proximidade com cada ponto (bolinha)
+            let pontoEncontrado = null;
+            let menorDistancia = raioDeteccao;
+
+            for (let i = 0; i < diasParaMostrar; i++) {
+                const pontoX = getX(i);
+
+                // Verificar ponto de críticos
+                const pontoCriticosY = getY(dadosCriticos[i]);
+                const distCriticos = Math.sqrt(Math.pow(mouseX - pontoX, 2) + Math.pow(mouseY - pontoCriticosY, 2));
+
+                if (distCriticos < menorDistancia) {
+                    menorDistancia = distCriticos;
+                    pontoEncontrado = { index: i, tipo: 'criticos' };
+                }
+
+                // Verificar ponto de atenção
+                const pontoAtencaoY = getY(dadosAtencao[i]);
+                const distAtencao = Math.sqrt(Math.pow(mouseX - pontoX, 2) + Math.pow(mouseY - pontoAtencaoY, 2));
+
+                if (distAtencao < menorDistancia) {
+                    menorDistancia = distAtencao;
+                    pontoEncontrado = { index: i, tipo: 'atencao' };
+                }
+            }
+
+            // Se não encontrou nenhum ponto próximo, esconder tooltip
+            if (!pontoEncontrado) {
+                tooltip.classList.remove('visible');
+                canvas.style.cursor = 'default';
+                return;
+            }
+
+            // Mudar cursor para indicar interatividade
+            canvas.style.cursor = 'pointer';
+
+            const clampedIndex = pontoEncontrado.index;
+
+            // Obter dados do dia
+            const criticos = dadosCriticos[clampedIndex];
+            const atencao = dadosAtencao[clampedIndex];
+            const data = datasCompletas[clampedIndex];
+
+            // Calcular variação em relação ao dia anterior
+            let varCriticos = 0;
+            let varAtencao = 0;
+            if (clampedIndex > 0) {
+                varCriticos = criticos - dadosCriticos[clampedIndex - 1];
+                varAtencao = atencao - dadosAtencao[clampedIndex - 1];
+            }
+
+            // Formatar data
+            const dataFormatada = data.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
+
+            // Atualizar tooltip
+            document.getElementById('chart-tooltip-date').textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+            document.getElementById('chart-tooltip-criticos').textContent = criticos;
+            document.getElementById('chart-tooltip-atencao').textContent = atencao;
+
+            // Variação críticos
+            const varCriticosEl = document.getElementById('chart-tooltip-criticos-var');
+            if (clampedIndex === 0) {
+                varCriticosEl.textContent = '';
+            } else {
+                varCriticosEl.textContent = varCriticos > 0 ? `+${varCriticos}` : varCriticos.toString();
+                varCriticosEl.className = 'chart-tooltip-variacao ' + (varCriticos > 0 ? 'positivo' : varCriticos < 0 ? 'negativo' : 'neutro');
+            }
+
+            // Variação atenção
+            const varAtencaoEl = document.getElementById('chart-tooltip-atencao-var');
+            if (clampedIndex === 0) {
+                varAtencaoEl.textContent = '';
+            } else {
+                varAtencaoEl.textContent = varAtencao > 0 ? `+${varAtencao}` : varAtencao.toString();
+                varAtencaoEl.className = 'chart-tooltip-variacao ' + (varAtencao > 0 ? 'positivo' : varAtencao < 0 ? 'negativo' : 'neutro');
+            }
+
+            // Posicionar tooltip
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let tooltipX = e.clientX + 15;
+            let tooltipY = e.clientY - 10;
+
+            // Ajustar se sair da tela
+            if (tooltipX + tooltipRect.width > window.innerWidth - 10) {
+                tooltipX = e.clientX - tooltipRect.width - 15;
+            }
+            if (tooltipY + tooltipRect.height > window.innerHeight - 10) {
+                tooltipY = window.innerHeight - tooltipRect.height - 10;
+            }
+            if (tooltipY < 10) {
+                tooltipY = 10;
+            }
+
+            tooltip.style.left = tooltipX + 'px';
+            tooltip.style.top = tooltipY + 'px';
+            tooltip.classList.add('visible');
+        };
+
+        this._chartMouseLeaveHandler = () => {
+            tooltip.classList.remove('visible');
+            canvas.style.cursor = 'default';
+        };
+
+        canvas.addEventListener('mousemove', this._chartMouseMoveHandler);
+        canvas.addEventListener('mouseleave', this._chartMouseLeaveHandler);
+    }
+
     atualizarBadgesSidebar() {
         // Atualizar contagem de processos em andamento
         const emAndamento = this.processos.filter(p =>
@@ -12096,6 +12622,18 @@ ProcessoManager.prototype.exportarHistoricoPDF = function() {
 
 // Inicializar aplicação
 const manager = new ProcessoManager();
+
+// Redesenhar gráfico ao redimensionar janela (com debounce)
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const processosAndamento = manager.processos.filter(p =>
+            p.status === 'aguardando-despacho' || p.status === 'concluso'
+        );
+        manager.renderizarGraficoEvolucao(processosAndamento);
+    }, 250);
+});
 
 // Event listener para fechar sidebar ao clicar fora em mobile
 document.addEventListener('click', (e) => {
