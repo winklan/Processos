@@ -1875,6 +1875,186 @@ textarea {
     opacity: 0.5;
 }
 
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.chart-header h2 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.btn-ver-historico {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ver-historico:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Modal do Gráfico Expandido */
+.modal-grafico {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-grafico.active {
+    display: flex;
+}
+
+.modal-grafico-content {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 1100px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-grafico-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-grafico-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.modal-grafico-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.modal-grafico-close:hover {
+    background: var(--bg-light);
+    color: var(--text-color);
+}
+
+.modal-grafico-filters {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+}
+
+.filter-periodo {
+    padding: 8px 16px;
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-periodo:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.filter-periodo.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.modal-grafico-body {
+    padding: 24px;
+    flex: 1;
+    overflow: auto;
+}
+
+.modal-chart-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.modal-chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.modal-grafico-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .modal-grafico-content {
+        max-height: 95vh;
+    }
+
+    .modal-chart-container {
+        height: 300px;
+    }
+
+    .modal-grafico-filters {
+        padding: 12px 16px;
+    }
+
+    .filter-periodo {
+        padding: 6px 12px;
+        font-size: 0.8125rem;
+    }
+
+    .btn-ver-historico span {
+        display: none;
+    }
+
+    .chart-header h2 {
+        font-size: 1rem;
+    }
+}
+
 .chart-tooltip {
     position: fixed;
     background: var(--white);
@@ -5164,7 +5344,15 @@ tbody tr:hover td:first-child {
 
             <!-- Gráfico de Evolução dos Processos Críticos -->
             <section class="chart-section" id="chart-section">
-                <h2>Evolução dos Processos Críticos</h2>
+                <div class="chart-header">
+                    <h2>Evolução dos Processos Críticos</h2>
+                    <button class="btn-ver-historico" onclick="manager.abrirModalGrafico()">
+                        <span>Ver histórico</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                        </svg>
+                    </button>
+                </div>
                 <div class="chart-container" id="chart-container">
                     <canvas id="chart-evolucao"></canvas>
                 </div>
@@ -5179,6 +5367,39 @@ tbody tr:hover td:first-child {
                     </div>
                 </div>
             </section>
+
+            <!-- Modal do Gráfico Expandido -->
+            <div class="modal-grafico" id="modal-grafico">
+                <div class="modal-grafico-content">
+                    <div class="modal-grafico-header">
+                        <h2>Histórico de Evolução dos Processos</h2>
+                        <button class="modal-grafico-close" onclick="manager.fecharModalGrafico()">&times;</button>
+                    </div>
+                    <div class="modal-grafico-filters">
+                        <button class="filter-periodo active" data-periodo="30" onclick="manager.filtrarGraficoModal(30)">30 dias</button>
+                        <button class="filter-periodo" data-periodo="60" onclick="manager.filtrarGraficoModal(60)">60 dias</button>
+                        <button class="filter-periodo" data-periodo="90" onclick="manager.filtrarGraficoModal(90)">90 dias</button>
+                        <button class="filter-periodo" data-periodo="180" onclick="manager.filtrarGraficoModal(180)">6 meses</button>
+                        <button class="filter-periodo" data-periodo="365" onclick="manager.filtrarGraficoModal(365)">1 ano</button>
+                        <button class="filter-periodo" data-periodo="0" onclick="manager.filtrarGraficoModal(0)">Todo período</button>
+                    </div>
+                    <div class="modal-grafico-body">
+                        <div class="modal-chart-container" id="modal-chart-container">
+                            <canvas id="chart-evolucao-modal"></canvas>
+                        </div>
+                        <div class="modal-grafico-legend">
+                            <div class="chart-legend-item">
+                                <span class="chart-legend-color criticos"></span>
+                                <span>Processos Críticos</span>
+                            </div>
+                            <div class="chart-legend-item">
+                                <span class="chart-legend-color atencao"></span>
+                                <span>Processos em Atenção</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Tooltip do Gráfico -->
             <div class="chart-tooltip" id="chart-tooltip">
@@ -10430,6 +10651,369 @@ class ProcessoManager {
 
         canvas.addEventListener('mousemove', this._chartMouseMoveHandler);
         canvas.addEventListener('mouseleave', this._chartMouseLeaveHandler);
+    }
+
+    abrirModalGrafico() {
+        const modal = document.getElementById('modal-grafico');
+        if (!modal) return;
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Renderizar gráfico com 30 dias por padrão
+        this.filtrarGraficoModal(30);
+
+        // Fechar com ESC
+        this._modalGraficoEscHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.fecharModalGrafico();
+            }
+        };
+        document.addEventListener('keydown', this._modalGraficoEscHandler);
+
+        // Fechar ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.fecharModalGrafico();
+            }
+        });
+    }
+
+    fecharModalGrafico() {
+        const modal = document.getElementById('modal-grafico');
+        if (!modal) return;
+
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+
+        if (this._modalGraficoEscHandler) {
+            document.removeEventListener('keydown', this._modalGraficoEscHandler);
+        }
+    }
+
+    filtrarGraficoModal(dias) {
+        // Atualizar botões ativos
+        document.querySelectorAll('.filter-periodo').forEach(btn => {
+            btn.classList.remove('active');
+            if (parseInt(btn.dataset.periodo) === dias) {
+                btn.classList.add('active');
+            }
+        });
+
+        this.renderizarGraficoModal(dias);
+    }
+
+    renderizarGraficoModal(diasParam) {
+        const canvas = document.getElementById('chart-evolucao-modal');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const container = canvas.parentElement;
+
+        // Configurar tamanho do canvas para alta resolução
+        const dpr = window.devicePixelRatio || 1;
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+
+        // Limpar canvas
+        ctx.clearRect(0, 0, rect.width, rect.height);
+
+        // Obter processos em andamento
+        const processosAndamento = this.processos.filter(p =>
+            p.status === 'aguardando-despacho' || p.status === 'concluso'
+        );
+        const processosComData = processosAndamento.filter(p => p.dataConclusao);
+
+        if (processosComData.length === 0) {
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '14px Open Sans';
+            ctx.textAlign = 'center';
+            ctx.fillText('Nenhum processo com data de conclusão', rect.width / 2, rect.height / 2);
+            return;
+        }
+
+        // Calcular período
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        let diasParaMostrar = diasParam;
+
+        // Se dias = 0, calcular todo o período baseado na data de conclusão mais antiga
+        if (diasParam === 0) {
+            const datasConclusao = processosComData.map(p => new Date(p.dataConclusao + 'T00:00:00'));
+            const dataMaisAntiga = new Date(Math.min(...datasConclusao));
+            diasParaMostrar = Math.ceil((hoje - dataMaisAntiga) / (1000 * 60 * 60 * 24)) + 1;
+            diasParaMostrar = Math.max(diasParaMostrar, 30); // Mínimo 30 dias
+        }
+
+        const dadosCriticos = [];
+        const dadosAtencao = [];
+        const datasCompletas = [];
+        const labels = [];
+
+        // Calcular intervalo de labels baseado no número de dias
+        let intervaloLabels = 5;
+        if (diasParaMostrar > 90) intervaloLabels = 10;
+        if (diasParaMostrar > 180) intervaloLabels = 15;
+        if (diasParaMostrar > 365) intervaloLabels = 30;
+
+        for (let i = diasParaMostrar - 1; i >= 0; i--) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() - i);
+
+            let criticos = 0;
+            let atencao = 0;
+
+            processosComData.forEach(p => {
+                const dataConc = new Date(p.dataConclusao + 'T00:00:00');
+                const diffDias = Math.floor((dia - dataConc) / (1000 * 60 * 60 * 24));
+
+                if (diffDias >= ProcessoManager.DIAS_CRITICO) {
+                    criticos++;
+                } else if (diffDias >= ProcessoManager.DIAS_ATENCAO) {
+                    atencao++;
+                }
+            });
+
+            dadosCriticos.push(criticos);
+            dadosAtencao.push(atencao);
+            datasCompletas.push(new Date(dia));
+
+            // Label: mostrar em intervalos regulares
+            const posicao = diasParaMostrar - 1 - i;
+            if (posicao % intervaloLabels === 0 || i === 0) {
+                labels.push(dia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+            } else {
+                labels.push('');
+            }
+        }
+
+        // Configurações do gráfico
+        const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+        const chartWidth = rect.width - padding.left - padding.right;
+        const chartHeight = rect.height - padding.top - padding.bottom;
+
+        const maxValue = Math.max(...dadosCriticos, ...dadosAtencao, 1);
+        const yScale = chartHeight / (maxValue * 1.1);
+
+        const getX = (index) => padding.left + (index / (diasParaMostrar - 1)) * chartWidth;
+        const getY = (value) => padding.top + chartHeight - (value * yScale);
+
+        // Desenhar grade de fundo
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 1;
+
+        const numLinhas = 5;
+        for (let i = 0; i <= numLinhas; i++) {
+            const y = padding.top + (i / numLinhas) * chartHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(padding.left + chartWidth, y);
+            ctx.stroke();
+
+            const valor = Math.round(maxValue * 1.1 * (1 - i / numLinhas));
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '11px Open Sans';
+            ctx.textAlign = 'right';
+            ctx.fillText(valor.toString(), padding.left - 8, y + 4);
+        }
+
+        // Função para desenhar linha
+        const desenharLinha = (dados, cor, corFill) => {
+            if (dados.length === 0) return;
+
+            // Área preenchida
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(0));
+            dados.forEach((valor, index) => {
+                ctx.lineTo(getX(index), getY(valor));
+            });
+            ctx.lineTo(getX(dados.length - 1), getY(0));
+            ctx.closePath();
+            ctx.fillStyle = corFill;
+            ctx.fill();
+
+            // Linha
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(dados[0]));
+            dados.forEach((valor, index) => {
+                if (index > 0) {
+                    ctx.lineTo(getX(index), getY(valor));
+                }
+            });
+            ctx.strokeStyle = cor;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Pontos (menos pontos para períodos longos)
+            const intervaloPotos = diasParaMostrar > 90 ? Math.ceil(diasParaMostrar / 30) : 1;
+            dados.forEach((valor, index) => {
+                if (index % intervaloPotos === 0 || index === dados.length - 1) {
+                    ctx.beginPath();
+                    ctx.arc(getX(index), getY(valor), 3, 0, Math.PI * 2);
+                    ctx.fillStyle = cor;
+                    ctx.fill();
+                }
+            });
+        };
+
+        desenharLinha(dadosAtencao, '#f59e0b', 'rgba(245, 158, 11, 0.1)');
+        desenharLinha(dadosCriticos, '#ef4444', 'rgba(239, 68, 68, 0.15)');
+
+        // Labels do eixo X
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '11px Open Sans';
+        ctx.textAlign = 'center';
+        labels.forEach((label, index) => {
+            if (label) {
+                ctx.fillText(label, getX(index), rect.height - 10);
+            }
+        });
+
+        // Armazenar dados para tooltip do modal
+        this.chartDataModal = {
+            dadosCriticos,
+            dadosAtencao,
+            datasCompletas,
+            padding,
+            chartWidth,
+            chartHeight,
+            diasParaMostrar,
+            getX,
+            getY
+        };
+
+        this.configurarTooltipGraficoModal(canvas);
+    }
+
+    configurarTooltipGraficoModal(canvas) {
+        const tooltip = document.getElementById('chart-tooltip');
+        if (!tooltip) return;
+
+        // Remover listeners anteriores do modal
+        if (this._chartModalMouseMoveHandler) {
+            canvas.removeEventListener('mousemove', this._chartModalMouseMoveHandler);
+            canvas.removeEventListener('mouseleave', this._chartModalMouseLeaveHandler);
+        }
+
+        const raioDeteccao = 15;
+
+        this._chartModalMouseMoveHandler = (e) => {
+            if (!this.chartDataModal) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const { diasParaMostrar, dadosCriticos, dadosAtencao, datasCompletas, getX, getY } = this.chartDataModal;
+
+            // Para períodos longos, verificar pontos visíveis
+            const intervaloPotos = diasParaMostrar > 90 ? Math.ceil(diasParaMostrar / 30) : 1;
+
+            let pontoEncontrado = null;
+            let menorDistancia = raioDeteccao;
+
+            for (let i = 0; i < diasParaMostrar; i++) {
+                // Verificar apenas pontos visíveis
+                if (i % intervaloPotos !== 0 && i !== diasParaMostrar - 1) continue;
+
+                const pontoX = getX(i);
+
+                const pontoCriticosY = getY(dadosCriticos[i]);
+                const distCriticos = Math.sqrt(Math.pow(mouseX - pontoX, 2) + Math.pow(mouseY - pontoCriticosY, 2));
+
+                if (distCriticos < menorDistancia) {
+                    menorDistancia = distCriticos;
+                    pontoEncontrado = { index: i, tipo: 'criticos' };
+                }
+
+                const pontoAtencaoY = getY(dadosAtencao[i]);
+                const distAtencao = Math.sqrt(Math.pow(mouseX - pontoX, 2) + Math.pow(mouseY - pontoAtencaoY, 2));
+
+                if (distAtencao < menorDistancia) {
+                    menorDistancia = distAtencao;
+                    pontoEncontrado = { index: i, tipo: 'atencao' };
+                }
+            }
+
+            if (!pontoEncontrado) {
+                tooltip.classList.remove('visible');
+                canvas.style.cursor = 'default';
+                return;
+            }
+
+            canvas.style.cursor = 'pointer';
+
+            const clampedIndex = pontoEncontrado.index;
+            const criticos = dadosCriticos[clampedIndex];
+            const atencao = dadosAtencao[clampedIndex];
+            const data = datasCompletas[clampedIndex];
+
+            let varCriticos = 0;
+            let varAtencao = 0;
+            if (clampedIndex > 0) {
+                varCriticos = criticos - dadosCriticos[clampedIndex - 1];
+                varAtencao = atencao - dadosAtencao[clampedIndex - 1];
+            }
+
+            const dataFormatada = data.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
+
+            document.getElementById('chart-tooltip-date').textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+            document.getElementById('chart-tooltip-criticos').textContent = criticos;
+            document.getElementById('chart-tooltip-atencao').textContent = atencao;
+
+            const varCriticosEl = document.getElementById('chart-tooltip-criticos-var');
+            if (clampedIndex === 0) {
+                varCriticosEl.textContent = '';
+            } else {
+                varCriticosEl.textContent = varCriticos > 0 ? `+${varCriticos}` : varCriticos.toString();
+                varCriticosEl.className = 'chart-tooltip-variacao ' + (varCriticos > 0 ? 'positivo' : varCriticos < 0 ? 'negativo' : 'neutro');
+            }
+
+            const varAtencaoEl = document.getElementById('chart-tooltip-atencao-var');
+            if (clampedIndex === 0) {
+                varAtencaoEl.textContent = '';
+            } else {
+                varAtencaoEl.textContent = varAtencao > 0 ? `+${varAtencao}` : varAtencao.toString();
+                varAtencaoEl.className = 'chart-tooltip-variacao ' + (varAtencao > 0 ? 'positivo' : varAtencao < 0 ? 'negativo' : 'neutro');
+            }
+
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let tooltipX = e.clientX + 15;
+            let tooltipY = e.clientY - 10;
+
+            if (tooltipX + tooltipRect.width > window.innerWidth - 10) {
+                tooltipX = e.clientX - tooltipRect.width - 15;
+            }
+            if (tooltipY + tooltipRect.height > window.innerHeight - 10) {
+                tooltipY = window.innerHeight - tooltipRect.height - 10;
+            }
+            if (tooltipY < 10) {
+                tooltipY = 10;
+            }
+
+            tooltip.style.left = tooltipX + 'px';
+            tooltip.style.top = tooltipY + 'px';
+            tooltip.classList.add('visible');
+        };
+
+        this._chartModalMouseLeaveHandler = () => {
+            tooltip.classList.remove('visible');
+            canvas.style.cursor = 'default';
+        };
+
+        canvas.addEventListener('mousemove', this._chartModalMouseMoveHandler);
+        canvas.addEventListener('mouseleave', this._chartModalMouseLeaveHandler);
     }
 
     atualizarBadgesSidebar() {
