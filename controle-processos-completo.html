@@ -192,7 +192,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    border-radius: 0;
+    border-radius: 6px;
     position: relative;
 }
 
@@ -205,7 +205,7 @@ body {
     width: 3px;
     height: 0;
     background: var(--accent-color);
-    border-radius: 0 2px 2px 0;
+    border-radius: 0 3px 3px 0;
     transition: height var(--transition-base);
 }
 
@@ -289,7 +289,7 @@ body {
     gap: 8px;
     padding: 16px 8px;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 2px solid var(--border-light);
+    border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     cursor: pointer;
     transition: all var(--transition-base);
@@ -745,7 +745,7 @@ body {
     padding: 10px 20px;
     font-size: 0.95rem;
     font-weight: 600;
-    border: 2px solid var(--white);
+    border: 1px solid var(--white);
     transition: all 0.3s ease;
 }
 
@@ -842,7 +842,7 @@ section:hover {
 
 .excel-import-container input[type="file"] {
     padding: 12px;
-    border: 2px dashed #cbd5e1;
+    border: 1.5px dashed #c8d3e0;
     border-radius: 8px;
     background: #f8fafc;
     cursor: pointer;
@@ -907,7 +907,7 @@ section:hover {
 .alerts-section h2 {
     font-family: 'Montserrat', sans-serif;
     color: var(--primary-color);
-    border-bottom: 2px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
     padding-bottom: 12px;
     margin-bottom: 20px;
     font-size: 1.2rem;
@@ -1450,14 +1450,15 @@ input[type="text"],
 input[type="date"],
 select,
 textarea {
-    padding: 12px 14px;
-    border: 2px solid var(--border-light);
+    padding: 11px 13px;
+    border: 1.5px solid var(--border-light);
     border-radius: var(--radius-md);
     font-size: 0.95rem;
     transition: all var(--transition-base);
     font-family: inherit;
     background: var(--white);
     color: var(--text-dark);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 input[type="text"]:hover,
@@ -1473,7 +1474,7 @@ select:focus,
 textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.1);
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
 }
 
 textarea {
@@ -1807,7 +1808,7 @@ textarea {
 .chart-section h2 {
     font-family: 'Montserrat', sans-serif;
     color: var(--primary-color);
-    border-bottom: 2px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
     padding-bottom: 12px;
     margin-bottom: 20px;
     font-size: 1.2rem;
@@ -2169,7 +2170,7 @@ textarea {
 
 .busca-integrada {
     padding: 10px 40px 10px 16px;
-    border: 2px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 8px;
     font-size: 0.95rem;
     transition: all 0.3s ease;
@@ -2218,7 +2219,7 @@ textarea {
     padding: 22px;
     border-radius: var(--radius-xl);
     margin-bottom: 24px;
-    border: 2px solid var(--primary-color);
+    border: 1.5px solid var(--primary-color);
     box-shadow: var(--shadow-lg), 0 0 0 1px rgba(30, 58, 95, 0.05);
     position: relative;
     overflow: hidden;
@@ -2239,7 +2240,7 @@ textarea {
     padding: 22px;
     border-radius: var(--radius-xl);
     margin-bottom: 24px;
-    border: 2px solid var(--warning-color);
+    border: 1.5px solid var(--warning-color);
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
@@ -2260,7 +2261,7 @@ textarea {
     padding: 22px;
     border-radius: var(--radius-xl);
     margin-bottom: 24px;
-    border: 2px solid var(--success-color);
+    border: 1.5px solid var(--success-color);
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
@@ -2283,7 +2284,7 @@ textarea {
     font-weight: 700;
     margin: 0 0 18px 0;
     padding-bottom: 12px;
-    border-bottom: 2px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
     letter-spacing: -0.01em;
     display: flex;
     align-items: center;
@@ -2506,19 +2507,19 @@ tbody tr:hover {
 .dias-normal {
     background-color: #d1fae5;
     color: #047857;
-    border: 2px solid #10b981;
+    border: 1.5px solid #10b981;
 }
 
 .dias-atencao {
     background-color: #fef3c7;
     color: #d97706;
-    border: 2px solid #f59e0b;
+    border: 1.5px solid #f59e0b;
 }
 
 .dias-critico {
     background-color: #fee2e2;
     color: #dc2626;
-    border: 2px solid #dc2626;
+    border: 1.5px solid #dc2626;
     animation: pulseDias 2s ease-in-out infinite;
 }
 
@@ -2751,6 +2752,36 @@ tbody tr:hover {
     height: 20px;
 }
 
+/* Botão fechar universal — cobre todos os close-modal-xxx sem estilo dedicado */
+.modal-header > button:not(.btn):not(.modal-close-btn):not(.close-btn-padronizado) {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.88);
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    transition: background 0.18s ease, transform 0.18s ease;
+    flex-shrink: 0;
+    font-family: inherit;
+    letter-spacing: 0;
+}
+
+.modal-header > button:not(.btn):not(.modal-close-btn):not(.close-btn-padronizado):hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: scale(1.08);
+}
+
 .modal-body {
     padding: 30px;
 }
@@ -2771,12 +2802,13 @@ tbody tr:hover {
 .modal-body .form-group select,
 .modal-body .form-group textarea {
     width: 100%;
-    padding: 14px 18px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    font-size: 1rem;
+    padding: 13px 16px;
+    border: 1.5px solid #dde3ec;
+    border-radius: 10px;
+    font-size: 0.975rem;
     transition: all 0.2s ease;
     font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .modal-body .form-group input:focus,
@@ -2784,7 +2816,7 @@ tbody tr:hover {
 .modal-body .form-group textarea:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .modal-body .form-group input::placeholder {
@@ -2929,8 +2961,68 @@ footer {
 
 /* Acessibilidade */
 *:focus-visible {
-    outline: 3px solid var(--primary-color);
-    outline-offset: 2px;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Scrollbar global da página */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #c8d3e0;
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+::-webkit-scrollbar-corner {
+    background: #f1f5f9;
+}
+
+/* Scrollbar global no tema escuro */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-color: #1e293b;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+[data-theme="dark"] ::-webkit-scrollbar-corner {
+    background: #1e293b;
+}
+
+/* Scrollbars refinadas — modais e sidebar (mais discretas) */
+.modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+.modal-content::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.modal-content::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    border: none;
+}
+.modal-content::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.28);
 }
 
 .sr-only {
@@ -3181,6 +3273,55 @@ footer {
     transform: scale(0.95);
 }
 
+/* Badge de minuta */
+.badge-minuta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background-color 0.15s, box-shadow 0.15s;
+    user-select: none;
+}
+.badge-minuta:hover {
+    background-color: #c8e6c9;
+    box-shadow: 0 1px 4px rgba(46,125,50,0.2);
+}
+
+/* Número do processo sem minuta — aparência padrão */
+.processo-link-sem-minuta strong {
+    font-weight: 600;
+}
+
+/* Número do processo com minuta — destaque sutil */
+.processo-link-com-minuta strong {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: #2e7d32;
+    text-underline-offset: 3px;
+}
+
+/* Linha clicável - hover sutil */
+.processo-row:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Modal de Minuta */
+.modal-content-minuta {
+    max-width: 720px;
+    width: 95%;
+}
+
 /* Coluna Fixa */
 .col-numero {
     position: sticky;
@@ -3246,7 +3387,7 @@ tbody tr:hover td:first-child {
     font-weight: 600;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .config-section .form-group {
@@ -3263,7 +3404,7 @@ tbody tr:hover td:first-child {
 .config-section .form-group input[type="number"] {
     width: 100%;
     padding: 12px;
-    border: 2px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -3498,7 +3639,7 @@ tbody tr:hover td:first-child {
 
 .finalizados-year-select {
     padding: 8px 12px;
-    border: 2px solid #e2e8f0;
+    border: 1.5px solid #e2e8f0;
     border-radius: 6px;
     font-size: 0.95rem;
     font-weight: 600;
@@ -3519,7 +3660,7 @@ tbody tr:hover td:first-child {
 }
 
 .finalizados-tabs-container {
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
     margin-bottom: 20px;
 }
 
@@ -3621,7 +3762,7 @@ tbody tr:hover td:first-child {
     top: 100%;
     left: 0;
     background: white;
-    border: 2px solid #e2e8f0;
+    border: 1.5px solid #e2e8f0;
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     min-width: 200px;
@@ -3777,9 +3918,9 @@ tbody tr:hover td:first-child {
 
 .spinner {
     display: inline-block;
-    width: 40px;
-    height: 40px;
-    border: 4px solid var(--border-color);
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border-color);
     border-top-color: var(--primary-color);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -3887,7 +4028,7 @@ tbody tr:hover td:first-child {
 .input-with-add-btn input {
     flex: 1;
     padding: 12px 15px;
-    border: 2px solid #ddd;
+    border: 1.5px solid #dde3ec;
     border-radius: 8px;
     font-size: 1em;
     transition: all 0.3s;
@@ -4289,7 +4430,7 @@ tbody tr:hover td:first-child {
 /* Células dos dias */
 .calendar-day-heatmap {
     min-height: 180px;
-    border: 2px solid #e2e8f0;
+    border: 1px solid #e8ecf2;
     border-radius: 10px;
     padding: 12px;
     background: white;
@@ -4616,8 +4757,8 @@ tbody tr:hover td:first-child {
     height: 16px;
     border-radius: 50%;
     background: white;
-    border: 3px solid #667eea;
-    box-shadow: 0 0 0 4px white;
+    border: 2px solid #667eea;
+    box-shadow: 0 0 0 3px white;
 }
 
 /* Tipos de movimentação */
@@ -5588,6 +5729,29 @@ tbody tr:hover td:first-child {
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary close-modal-obs">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Minuta/Rascunho -->
+    <div id="modal-minuta" class="modal" role="dialog" aria-labelledby="modal-minuta-title" aria-hidden="true">
+        <div class="modal-content modal-content-minuta">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-minuta-title">Rascunho / Minuta</h2>
+                    <p id="minuta-processo-info" style="margin:0; font-size:0.85rem; color:var(--text-secondary, #666);"></p>
+                </div>
+                <button class="close-modal-minuta" aria-label="Fechar modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="minuta-texto">Rascunho / Minuta do Processo</label>
+                    <textarea id="minuta-texto" rows="18" placeholder="Digite aqui o rascunho ou minuta deste processo..." style="width:100%; resize:vertical; font-family:inherit; font-size:0.95rem; padding:10px; border:1px solid var(--border-color, #ddd); border-radius:6px; box-sizing:border-box;"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary close-modal-minuta">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="manager.salvarMinuta()">💾 Salvar</button>
                 </div>
             </div>
         </div>
@@ -6565,6 +6729,23 @@ class ProcessoManager {
         return parseFloat(`${timestamp}.${random}${sequence}`);
     }
 
+    // Formata número de processo para o padrão CNJ: NNNNNNN-DD.AAAA.J.TT.OOOO
+    // Se o número tiver exatamente 20 dígitos (sem formatação), aplica a máscara.
+    // Caso contrário, retorna como está.
+    formatarNumeroProcessoCNJ(numero) {
+        const digits = String(numero).replace(/\D/g, '');
+        if (digits.length === 20) {
+            const n = digits.slice(0, 7);
+            const d = digits.slice(7, 9);
+            const a = digits.slice(9, 13);
+            const j = digits.slice(13, 14);
+            const t = digits.slice(14, 16);
+            const o = digits.slice(16, 20);
+            return `${n}-${d}.${a}.${j}.${t}.${o}`;
+        }
+        return numero;
+    }
+
     // Função auxiliar para encontrar processo por ID de forma robusta
     // Lida com casos onde o ID pode ser string ou número
     encontrarProcessoPorId(id) {
@@ -6916,6 +7097,16 @@ class ProcessoManager {
             }
         });
 
+        // Modal de minuta/rascunho
+        document.querySelectorAll('.close-modal-minuta').forEach(btn => {
+            btn.addEventListener('click', () => this.fecharModalMinuta());
+        });
+        document.getElementById('modal-minuta').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                this.fecharModalMinuta();
+            }
+        });
+
         // Modal de relatório
         document.querySelectorAll('.close-modal-relatorio').forEach(btn => {
             btn.addEventListener('click', () => this.fecharModalRelatorio());
@@ -7132,6 +7323,8 @@ class ProcessoManager {
                     this.fecharModalCadastroLote();
                 } else if (document.getElementById('modal-relatorio').classList.contains('active')) {
                     this.fecharModalRelatorio();
+                } else if (document.getElementById('modal-minuta').classList.contains('active')) {
+                    this.fecharModalMinuta();
                 } else if (document.getElementById('modal-observacoes').classList.contains('active')) {
                     this.fecharModalObservacoes();
                 } else if (document.getElementById('modal-editar').classList.contains('active')) {
@@ -7907,11 +8100,11 @@ class ProcessoManager {
         const tooltipTexto = observacoes || 'Sem observações cadastradas';
 
         return `
-            <tr>
+            <tr class="processo-row">
                 <td>
                     <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
                         <div class="processo-numero-wrapper" onmouseenter="manager.posicionarTooltip(event, this)" onmouseleave="manager.esconderTooltip(this)">
-                            <a href="#" class="processo-link" onclick="manager.mostrarObservacoes(${processo.id}); return false;" aria-label="Ver observações do processo ${this.escaparHTML(processo.numeroProcesso)}">
+                            <a href="#" class="processo-link ${processo.minuta && processo.minuta.trim() ? 'processo-link-com-minuta' : 'processo-link-sem-minuta'}" onclick="manager.abrirMinuta(${processo.id}); return false;" aria-label="Abrir rascunho/minuta do processo ${this.escaparHTML(processo.numeroProcesso)}" title="Clique para abrir o rascunho/minuta">
                                 <strong>${this.escaparHTML(processo.numeroProcesso)}</strong>
                             </a>
                             <div class="tooltip-observacoes ${tooltipClass}">
@@ -7921,6 +8114,7 @@ class ProcessoManager {
                         <button class="btn-copiar" onclick="manager.copiarPorId(${processo.id}, event)" aria-label="Copiar número do processo" title="Copiar número">
                             📋
                         </button>
+                        ${processo.minuta && processo.minuta.trim() ? `<span class="badge-minuta" title="Clique no número para ver o rascunho">📝 Rascunho</span>` : ''}
                     </div>
                 </td>
                 <td>${this.escaparHTML(this.getAssuntoLabel(processo.assunto))}</td>
@@ -8210,6 +8404,51 @@ class ProcessoManager {
         document.body.style.overflow = '';
     }
 
+    handleRowClick(e, id) {
+        // Ignora cliques em botões, links ou elementos dentro deles
+        if (e.target.closest('button, a, input, select, textarea')) return;
+        this.abrirMinuta(id);
+    }
+
+    abrirMinuta(id) {
+        const processo = this.encontrarProcessoPorId(id);
+        if (!processo) return;
+
+        this._minutaIdAtual = id;
+        document.getElementById('minuta-processo-info').textContent =
+            `${processo.numeroProcesso} — ${this.getAssuntoLabel(processo.assunto)}`;
+        document.getElementById('minuta-texto').value = processo.minuta || '';
+
+        const modal = document.getElementById('modal-minuta');
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('minuta-texto').focus();
+    }
+
+    salvarMinuta() {
+        const id = this._minutaIdAtual;
+        if (!id) return;
+
+        const processo = this.encontrarProcessoPorId(id);
+        if (!processo) return;
+
+        processo.minuta = document.getElementById('minuta-texto').value;
+        processo.dataModificacao = new Date().toISOString();
+        this.salvarProcessos();
+        this.fecharModalMinuta();
+
+        this.mostrarNotificacao('Minuta salva com sucesso!', 'success');
+    }
+
+    fecharModalMinuta() {
+        const modal = document.getElementById('modal-minuta');
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        this._minutaIdAtual = null;
+    }
+
     abrirModalRelatorio() {
         const modal = document.getElementById('modal-relatorio');
 
@@ -8289,8 +8528,8 @@ class ProcessoManager {
                         continue;
                     }
 
-                    // Converter número do processo para string
-                    numeroProcesso = String(numeroProcesso).trim();
+                    // Converter número do processo para string e formatar se necessário
+                    numeroProcesso = this.formatarNumeroProcessoCNJ(String(numeroProcesso).trim());
 
                     // Tratar a data
                     let dataFormatada = '';
@@ -8631,7 +8870,7 @@ class ProcessoManager {
 
             // Pegar a data (último elemento) e o número (todo o resto)
             const data = partes[partes.length - 1];
-            const numeroProcesso = partes.slice(0, -1).join(' ');
+            const numeroProcesso = this.formatarNumeroProcessoCNJ(partes.slice(0, -1).join(' '));
 
             // Validar formato da data (DD/MM/AAAA)
             const regexData = /^(\d{2})\/(\d{2})\/(\d{4})$/;
